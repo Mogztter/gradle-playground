@@ -1,0 +1,35 @@
+def hasChanges(project, latestTag) {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable = 'git'
+            args 'diff', latestTag, '--stat', project
+            standardOutput = os
+        }
+        //println os.toString()
+        return !os.toString().empty
+    }
+}
+allprojects {
+    task release << {
+        //task -> println "I'm $task.project.name"
+    }
+}
+def needRelease(project) {
+    String latestTag = 'technique-1.0'
+    if (hasChanges(project.projectDir, latestTag)) { 
+            print 'Project ' + project.name + ' need to be release'
+            if (project.configurations.hasProperty('compileModule')) {
+                println ' with dependencies :'
+                project.configurations.compileModule.dependencies.all {
+                    println '    ' + it.dependencyProject
+                }
+            }
+    }
+}
+subprojects {
+    release {
+        afterEvaluate { Project project ->
+            needRelease(project)
+        }
+    }
+}

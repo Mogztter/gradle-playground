@@ -1,0 +1,6 @@
+configurations {
+    compileModule {
+        description = 'module classpath'
+        extendsFrom compile
+    }
+}

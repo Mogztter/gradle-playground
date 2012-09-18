@@ -1,0 +1,10 @@
+configurations {
+    compileModule {
+        description = 'module classpath'
+        extendsFrom compile
+    }
+}
+dependencies {
+    compileModule project(':commun:commun-api')
+    compileModule project(':codification:codification-api')
+}
