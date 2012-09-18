@@ -1,0 +1,22 @@
+task setWhoamiProperty {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable = 'whoami'
+        }
+        ext.whoami = os.toString()
+    }
+}
+
+task setHostnameProperty {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            executable = 'hostname'
+        }
+        ext.hostname = os.toString()
+    }
+}
+
+task printBuildInfo(dependsOn: [setWhoamiProperty, setHostnameProperty]) {
+    println tasks.setWhoamiProperty.whoami
+    println tasks.setHostnameProperty.hostname
+}
